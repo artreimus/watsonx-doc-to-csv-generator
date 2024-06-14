@@ -9,14 +9,17 @@ from ibm_watsonx_ai.foundation_models.utils.enums import ModelTypes, DecodingMet
 import pandas as pd
 import csv
 import re
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
 # URL of the hosted LLMs is hardcoded because at this time all LLMs share the same endpoint
-url = "https://us-south.ml.cloud.ibm.com"
+url =  os.environ.get('WATSON_URL')
 # Replace with your watsonx project id (look up in the project Manage tab)
-watsonx_project_id = "###"
+watsonx_project_id =  os.environ.get('WATSON_PROJECT_ID')
 # Replace with your IBM Cloud key
-api_key = "###"
+api_key = os.environ.get('WATSON_API_KEY')
 
 model_type = "meta-llama/llama-3-70b-instruct"
 max_tokens = 4095
@@ -40,7 +43,7 @@ def get_model(model_type,max_tokens,min_tokens,decoding,temperature):#, repetiti
             "apikey": api_key,
             "url": url
         },
-        project_id= "###"
+        project_id=watsonx_project_id
         )
 
     return model
