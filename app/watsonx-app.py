@@ -52,7 +52,7 @@ def get_model(model_type,max_tokens,min_tokens,decoding,temperature):#, repetiti
 model = get_model(model_type, max_tokens, min_tokens, decoding, temperature)
 
 # Initialize the application
-st.title("RFP Table Generator")
+st.title("RFP Compliance Table Generator")
 
 # Initialize session state variables if they don't exist
 if 'input_pairs' not in st.session_state:
