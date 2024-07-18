@@ -21,7 +21,7 @@ watsonx_project_id =  os.environ.get('WATSON_PROJECT_ID')
 # Replace with your IBM Cloud key
 api_key = os.environ.get('WATSON_API_KEY')
 
-model_type = "ibm/granite-13b-chat-v2"
+model_type = "meta-llama/llama-3-70b-instruct"
 max_tokens = 4000
 min_tokens = 1
 decoding = DecodingMethods.GREEDY
