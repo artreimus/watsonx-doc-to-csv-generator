@@ -12,8 +12,6 @@ import re
 from dotenv import load_dotenv
 import os
 
-from app.prompts import PROMPT_DESCRIPTION_IMPROVEMENT
-
 load_dotenv()
 
 # URL of the hosted LLMs is hardcoded because at this time all LLMs share the same endpoint
