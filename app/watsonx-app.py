@@ -138,24 +138,8 @@ if uploaded_files:
 for i, text in enumerate(st.session_state['document_texts']):
     st.subheader(f"Text from Document {i+1}")
     st.text_area(label=f"Text from file {uploaded_files[i].name}", value=text, height=300, key=f"file-{i}-{uploaded_files[i].name}")
-
-def create_prompt_improve_description(columnn_data, document_texts):
-    columns_formatted = ", ".join([f"{pair['column_name']} (Description: {pair['column_description']})" for pair in column_data])
     
-    # Combine all document texts, adding a divider between documents
-    documents_combined = "\n---\n".join(document_texts)  # Using '---' as a divider
-    
-    prompt = f'''
-    {PROMPT_DESCRIPTION_IMPROVEMENT}
-    
-    ######
-    User: Please help me improve the following columns descriptions
-    Columns: {columns_formatted}
-    Document: {documents_combined}
-    '''
-
-    
-def create_prompt_generate(column_data, document_texts):
+def create_prompt(column_data, document_texts):
     # Format the columns for the prompt
     columns_formatted = ", ".join([f"{pair['column_name']} (Description: {pair['column_description']})" for pair in column_data])
     
