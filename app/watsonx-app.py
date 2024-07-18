@@ -12,6 +12,8 @@ import re
 from dotenv import load_dotenv
 import os
 
+from app.prompts import PROMPT_DESCRIPTION_IMPROVEMENT
+
 load_dotenv()
 
 # URL of the hosted LLMs is hardcoded because at this time all LLMs share the same endpoint
@@ -21,11 +23,11 @@ watsonx_project_id =  os.environ.get('WATSON_PROJECT_ID')
 # Replace with your IBM Cloud key
 api_key = os.environ.get('WATSON_API_KEY')
 
-model_type = "meta-llama/llama-3-70b-instruct"
-max_tokens = 4095
-min_tokens = 50
+model_type = "ibm/granite-13b-chat-v2"
+max_tokens = 4000
+min_tokens = 1
 decoding = DecodingMethods.GREEDY
-temperature = 0.7
+temperature = 0.1
 
 def get_model(model_type,max_tokens,min_tokens,decoding,temperature):#, repetition_penalty):
 
@@ -50,6 +52,15 @@ def get_model(model_type,max_tokens,min_tokens,decoding,temperature):#, repetiti
 
 # Get the watsonx model
 model = get_model(model_type, max_tokens, min_tokens, decoding, temperature)
+
+# Display the IBM logo centered
+col1, col2, col3 = st.columns([4, 1, 4])
+with col1:
+    st.write("")
+with col2:
+    st.image("app/ibm-logo.png", width=100)
+with col3:
+    st.write("")
 
 # Initialize the application
 st.title("RFP Compliance Table Generator")
@@ -129,8 +140,24 @@ if uploaded_files:
 for i, text in enumerate(st.session_state['document_texts']):
     st.subheader(f"Text from Document {i+1}")
     st.text_area(label=f"Text from file {uploaded_files[i].name}", value=text, height=300, key=f"file-{i}-{uploaded_files[i].name}")
+
+def create_prompt_improve_description(columnn_data, document_texts):
+    columns_formatted = ", ".join([f"{pair['column_name']} (Description: {pair['column_description']})" for pair in column_data])
     
-def create_prompt(column_data, document_texts):
+    # Combine all document texts, adding a divider between documents
+    documents_combined = "\n---\n".join(document_texts)  # Using '---' as a divider
+    
+    prompt = f'''
+    {PROMPT_DESCRIPTION_IMPROVEMENT}
+    
+    ######
+    User: Please help me improve the following columns descriptions
+    Columns: {columns_formatted}
+    Document: {documents_combined}
+    '''
+
+    
+def create_prompt_generate(column_data, document_texts):
     # Format the columns for the prompt
     columns_formatted = ", ".join([f"{pair['column_name']} (Description: {pair['column_description']})" for pair in column_data])
     
